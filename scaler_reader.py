@@ -29,12 +29,14 @@ args = parser.parse_args()
 #    sys.exit()
 
 #generating data directry
-if not os.path.exists(args.name):
-    os.makedirs(args.name)
-    if not os.path.exists(args.name+'/binary'):
-        os.makedirs(args.name+'/binary')
-    if not os.path.exists(args.name+'/decimal'):
-        os.makedirs(args.name+'/decimal')
+if not os.path.exists('data'):
+    os.makedirs('data')
+    if not os.path.exists('data/'+args.name):
+        os.makedirs('data/'+args.name)
+        if not os.path.exists('data/'+args.name+'/binary'):
+            os.makedirs('data/'+args.name+'/binary')
+        if not os.path.exists('data/'+args.name+'/decimal'):
+            os.makedirs('data/'+args.name+'/decimal')
 
 #loading settings (save your default settings at "yaml_files/settings.yaml")
 with open(SETTING_FILE_PATH, encoding='utf-8') as f:
