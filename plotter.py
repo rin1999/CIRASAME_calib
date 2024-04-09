@@ -5,17 +5,18 @@ import os
 import re
 import glob
 import numpy as np
-from scipy.optimize import curve_fit
+#from scipy.optimize import curve_fit
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-ch','--channel', default='0')
 args = parser.parse_args()
 
 READ_CH = int(args.channel)
+READ_CH = READ_CH + 10
 read_row = int(READ_CH/4)
 read_col = READ_CH%4
 
-DIR_PATH = '20240208_2/decimal'
+DIR_PATH = 'data/cirasame013_5/decimal'
 file_list = glob.glob(os.path.join(DIR_PATH, "*.txt"))
 
 hits = []
@@ -27,15 +28,17 @@ for file_path in file_list:
     file_name = os.path.basename(file_path)
     print('now reading '+file_name)
     v_dac = int(re.sub(r"\D", "", file_name))
-    df = pd.read_table(file_path, delim_whitespace=True, header=None)
-    clock = df.iat[0,1]
-    if clock == 0:
+    df = pd.read_table(file_path, sep='\s+', header=None)
+
+    #3rd word が１カウント当たり0.524ms
+    t = df.iat[0,3]*0.524*0.001
+    if t == 0:
         continue
     #hits.append(df.iat[read_row+2, read_col+1]/clock*125000000)
-    if df.iat[read_row+2, read_col+1] == 0:
-        hits.append(np.log10(1/clock*125000000))
+    if df.iat[read_row, read_col+1] == 0:
+        hits.append(np.log10(1/t))
     else:
-        hits.append(np.log10(df.iat[read_row+2, read_col+1]/clock*125000000))
+        hits.append(np.log10(df.iat[read_row, read_col+1]/t))
     dac_val.append(v_dac)
 
 """
@@ -45,7 +48,7 @@ def sigmoid_func(x, x0, a, b, c): #for fitting
     #else:
     #    return np.exp(a*(x-x0))/(np.exp(a*(x-x0))+1)
 """
-
+print(df)
 
 plt.scatter(dac_val, hits)
 #plt.yscale('log')
