@@ -9,7 +9,11 @@ import numpy as np
 
 class Data_reader:
 
-    def __init__(self, ch: int, file_path: str) -> None:
-        self.ch = ch
+    def __init__(self, file_path: str) -> None:
         self.file_path = file_path
+        file_list = glob.glob(os.path.join(self.file_path,'*.txt'))
+        self.hits = []
+        self.dac_val = []
+        
+
         

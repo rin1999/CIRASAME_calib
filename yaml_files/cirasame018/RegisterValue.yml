@@ -11,6 +11,7 @@ CITIROC1:
   En_Low_Gain_Slow Shaper: Enable
   LG PA bias: weakbias
   PreAMP: LGCf_200fF
+  PreAMP: HGCf_200fF
   SCA bias: highbias
   Sel Trig Ext PSC: Enable
   Time Constant HG Shaper: 50.0ns
@@ -28,6 +29,7 @@ CITIROC2:
   En_Low_Gain_Slow Shaper: Enable
   LG PA bias: weakbias
   PreAMP: LGCf_200fF
+  PreAMP: HGCf_200fF
   SCA bias: highbias
   Sel Trig Ext PSC: Enable
   Time Constant HG Shaper: 50.0ns
@@ -45,6 +47,7 @@ CITIROC3:
   En_Low_Gain_Slow Shaper: Enable
   LG PA bias: weakbias
   PreAMP: LGCf_200fF
+  PreAMP: HGCf_200fF
   SCA bias: highbias
   Sel Trig Ext PSC: Enable
   Time Constant HG Shaper: 50.0ns
@@ -62,6 +65,7 @@ CITIROC4:
   En_Low_Gain_Slow Shaper: Enable
   LG PA bias: weakbias
   PreAMP: LGCf_200fF
+  PreAMP: HGCf_200fF
   SCA bias: highbias
   Sel Trig Ext PSC: Enable
   Time Constant HG Shaper: 50.0ns
@@ -69,5 +73,5 @@ CITIROC4:
   bypass PSC: Enable
 High Gain Channel: 22
 Probe: Out_fs
-Probe Channel: 96
-Probe Mux: 4
+Probe Channel: 13
+Probe Mux: 1
