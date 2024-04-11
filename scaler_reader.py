@@ -11,23 +11,25 @@ import yaml
 import argparse
 import subprocess as sub
 import numpy as np
+#import shutil
 #import PySimpleGUI as sg
 
 #args -> --name (default is "data_default"), --settings
 #getting arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('-n','--name', default='data_default')
-parser.add_argument('-ip', '--ip_address', default='192.168.10.16')
+#parser.add_argument('-ip', '--ip_address', default='192.168.10.16')
 parser.add_argument('-s','--settings', default='yaml_files/settings.yml')
 args = parser.parse_args()
+
+SETTING_FILE_PATH = args.settings
 
 #if args.settings == None:
 #    print('error: No argument for --settings')
 #    sys.exit()
 
-CIRASAME_IP = args.ip_address
-SETTING_FILE_PATH = args.ip_address
-print(CIRASAME_IP)
+#CIRASAME_IP = args.ip_address
+#print(CIRASAME_IP)
 
 #generating data directry
 if not os.path.exists('data'):
@@ -46,7 +48,7 @@ with open(SETTING_FILE_PATH, encoding='utf-8') as f:
 CITIROC_PATH = settings['CITIROC_path']
 HUL_PATH     = settings['HUL_path']
 YAML_PATH    = settings['YAML_path']
-#CIRASAME_IP  = settings['CIRASAME_ip']
+CIRASAME_IP  = settings['CIRASAME_ip']
 DAC_SCAN     = settings['DAC_scan']
 
 
@@ -65,7 +67,7 @@ layout = [[sg.Text('taking data...')],
           [sg.Cancel()]]
 window = sg.Window('scaler reader', layout)
 """
-sub.run([CITIROC_PATH+'/femcitiroc_control', '-ip='+CIRASAME_IP, '-yaml='+YAML_PATH+'/InputDAC.yml', '-sc', '-read', '-q'])
+#sub.run([CITIROC_PATH+'/femcitiroc_control', '-ip='+CIRASAME_IP, '-yaml='+YAML_PATH+'/InputDAC.yml', '-sc', '-read', '-q'])
 
 t_start = time.time()
 
@@ -73,14 +75,14 @@ t_start = time.time()
 #main part of reading scaler
 for dac in scan_dac_value:
     
-    with open('yaml_files/RegisterValue.yml', 'r') as f:
+    with open(YAML_PATH+'/RegisterValue.yml', 'r') as f:
         yml_RegVal = yaml.safe_load(f)
     print('start : DAC2 = {}'.format(str(dac)))
     yml_RegVal['CITIROC1']['DAC2 code'] = dac
     yml_RegVal['CITIROC2']['DAC2 code'] = dac
     yml_RegVal['CITIROC3']['DAC2 code'] = dac
     yml_RegVal['CITIROC4']['DAC2 code'] = dac
-    with open('yaml_files/RegisterValue.yml', 'w') as f:
+    with open(YAML_PATH+'/RegisterValue.yml', 'w') as f:
         yaml.dump(yml_RegVal, f)
     
     """
@@ -91,9 +93,9 @@ for dac in scan_dac_value:
     current_progress = current_progress+1
     """
 
-    sub.run([CITIROC_PATH+'/femcitiroc_control', '-ip='+CIRASAME_IP, '-yaml='+YAML_PATH+'/RegisterValue.yml', '-sc', '-read', '-q'])
+    sub.run([CITIROC_PATH+'/femcitiroc_control', '-ip='+CIRASAME_IP, '-yaml='+YAML_PATH+'/RegisterValue.yml', '-yaml='+YAML_PATH+'/InputDAC.yml', '-yaml='+YAML_PATH+'/DiscriMask.yml', '-sc', '-read', '-q'])
     sub.run([HUL_PATH+'/write_register', CIRASAME_IP, '0x80000000', '0x1', '1'])
-    time.sleep(1)
+    time.sleep(5)
     sub.run([HUL_PATH+'/read_scr', CIRASAME_IP, 'data/'+args.name+'/binary/dataBin{}.dat'.format(str(dac))])
     print(yml_RegVal['CITIROC1']['DAC2 code'])
     

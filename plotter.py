@@ -9,6 +9,7 @@ import numpy as np
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-ch','--channel', default='0')
+parser.add_argument('-f', '--file')
 args = parser.parse_args()
 
 READ_CH = int(args.channel)
@@ -16,7 +17,7 @@ READ_CH = READ_CH + 10
 read_row = int(READ_CH/4)
 read_col = READ_CH%4
 
-DIR_PATH = 'data/cirasame013_5/decimal'
+DIR_PATH = 'data/'+args.file+'/decimal'
 file_list = glob.glob(os.path.join(DIR_PATH, "*.txt"))
 
 hits = []
@@ -26,7 +27,7 @@ dac_val = []
 
 for file_path in file_list:
     file_name = os.path.basename(file_path)
-    print('now reading '+file_name)
+    #print('now reading '+file_name)
     v_dac = int(re.sub(r"\D", "", file_name))
     df = pd.read_table(file_path, sep='\s+', header=None)
 
@@ -48,7 +49,7 @@ def sigmoid_func(x, x0, a, b, c): #for fitting
     #else:
     #    return np.exp(a*(x-x0))/(np.exp(a*(x-x0))+1)
 """
-print(df)
+#print(df)
 
 plt.scatter(dac_val, hits)
 #plt.yscale('log')
