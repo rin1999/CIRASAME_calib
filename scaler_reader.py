@@ -95,7 +95,7 @@ for dac in scan_dac_value:
 
     sub.run([CITIROC_PATH+'/femcitiroc_control', '-ip='+CIRASAME_IP, '-yaml='+YAML_PATH+'/RegisterValue.yml', '-yaml='+YAML_PATH+'/InputDAC.yml', '-yaml='+YAML_PATH+'/DiscriMask.yml', '-sc', '-read', '-q'])
     sub.run([HUL_PATH+'/write_register', CIRASAME_IP, '0x80000000', '0x1', '1'])
-    time.sleep(5)
+    time.sleep(1)
     sub.run([HUL_PATH+'/read_scr', CIRASAME_IP, 'data/'+args.name+'/binary/dataBin{}.dat'.format(str(dac))])
     print(yml_RegVal['CITIROC1']['DAC2 code'])
     

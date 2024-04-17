@@ -43,7 +43,12 @@ for file_path in file_list:
     df = pd.read_table(file_path, sep='\s+', header=None)
 
     #3rd word が１カウント当たり0.524ms
-    t = (df.iat[0,3]+1)*0.524*0.001
+    t=0
+    try:
+        t = (df.iat[0,3]+1)*0.524*0.001
+    except:
+        continue
+    
     for i in range(32):
         if df.iat[read_row[i], read_col[i]+1] == 0:
             hits[i].append(np.log10(1/t))
